@@ -1,4 +1,4 @@
-import model.LoginPageMesto;
+import model.constants.Data;
 import model.constants.Urls;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +18,11 @@ public class BaseTest {
 
     private WebDriver driver;
 
+    @AfterEach
+    public void teardown() {
+        driver.quit();
+    }
+
     @Test
     public void loginTest() {
         ChromeOptions options = new ChromeOptions();
@@ -26,7 +31,7 @@ public class BaseTest {
 
         driver.get(Urls.URL);
         LoginPageMesto objLoginPage = new LoginPageMesto(driver);
-        objLoginPage.login("radkovich@gmail.com", "123456");
+        objLoginPage.login(Data.EMAIL, Data.PASSWORD);
         new WebDriverWait(driver, Duration.ofSeconds(1)).until(ExpectedConditions.visibilityOfElementLocated(By.className("header__user")));
         String text = driver.findElement(By.className("header__logout")).getText();
         System.out.println("Текст кнопки: " + text);
@@ -37,10 +42,5 @@ public class BaseTest {
         driver.findElement(By.xpath("//form[@name='edit-avatar']/button[text()='Сохранить']")).click();
 
 
-    }
-
-    @AfterEach
-    public void teardown() {
-        driver.quit();
     }
 }

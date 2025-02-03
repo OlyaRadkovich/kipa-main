@@ -1,32 +1,39 @@
-import model.HomePageMesto;
-import model.LoginPageMesto;
-import model.ProfilePageMesto;
+import model.constants.Data;
 import model.constants.Urls;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public class ProfilePageTest {
-   private WebDriver driver;
+    private WebDriver driver;
 
-   @Test
-   public void checkActivity() {
-      ChromeOptions options = new ChromeOptions();
-      options.addArguments("--no-sandbox","--headless", "--disable-dev-shm-usage");
-      driver = new ChromeDriver(options);
+    @AfterEach
+    public void teardown() {
+        driver.quit();
+    }
 
-      driver.get(Urls.URL);
+    @Test
+    public void checkActivity() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage");
+        driver = new ChromeDriver(options);
 
-      LoginPageMesto objLoginPage = new LoginPageMesto(driver);
-      String email = "radkovich@gmail.com";
-      String password = "123456";
-      objLoginPage.login(email, password);
+        driver.get(Urls.URL);
 
-      HomePageMesto objHomePage = new HomePageMesto(driver);
-      objHomePage.waitForLoadProfileData();
-      objHomePage.editProfileData();
+        LoginPageMesto objLoginPage = new LoginPageMesto(driver);
+        objLoginPage.login(Data.EMAIL, Data.PASSWORD);
 
+        HomePageMesto objHomePage = new HomePageMesto(driver);
+        objHomePage.waitForLoadProfileData();
+        objHomePage.openProfileData();
 
-   }
+        ProfilePageMesto objProfilePage = new ProfilePageMesto(driver);
+        objProfilePage.changeActivity(Data.NEW_ACTIVITY);
+        objProfilePage.saveProfileChanges();
+
+        objHomePage.waitForChangedActivity(Data.NEW_ACTIVITY);
+
+    }
 }

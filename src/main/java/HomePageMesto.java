@@ -1,5 +1,3 @@
-package model;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -17,17 +15,18 @@ public class HomePageMesto {
         this.driver = driver;
     }
 
-    public void editProfileData() {
+    public void openProfileData() {
         driver.findElement(editProfileButton).click();
     }
 
     public void waitForLoadProfileData() {
-        new WebDriverWait(driver, Duration.ofSeconds(3)).until(driver -> (driver.findElement(profileTitle).getText() != null
-                && !driver.findElement(profileTitle).getText().isEmpty()
-        ));
+        new WebDriverWait(driver, Duration.ofSeconds(7)).until(driver ->
+                (driver.findElement(profileTitle).getText() != null
+                        && !driver.findElement(profileTitle).getText().isEmpty()
+                ));
     }
 
     public void waitForChangedActivity(String changed) {
-        new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions.textToBePresentInElementLocated(profileActivity, changed));
+        new WebDriverWait(driver, Duration.ofSeconds(1)).until(ExpectedConditions.textToBePresentInElementLocated(profileActivity, changed));
     }
 }
